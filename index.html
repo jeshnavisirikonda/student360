@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student360 | Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fc;
+    color: #242b45;
+}
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #201b46;
+    color: white;
+    padding: 28px 18px;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.logo span {
+    color: #a99bff;
+}
+
+.sidebar p {
+    color: #bcb8d9;
+    font-size: 13px;
+    margin-bottom: 35px;
+}
+
+.nav-item {
+    display: block;
+    padding: 13px;
+    margin-bottom: 8px;
+    border-radius: 9px;
+    color: #dedbf3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #4b4087;
+    color: white;
+}
+
+main {
+    margin-left: 240px;
+    padding: 30px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.topbar h1 {
+    font-size: 27px;
+}
+
+.topbar p {
+    color: #777e96;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.profile {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.welcome {
+    background: linear-gradient(120deg, #5846c9, #8877f4);
+    color: white;
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 28px;
+}
+
+.welcome h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.welcome p {
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.section-title {
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 23px;
+    border-radius: 15px;
+    border: 1px solid #ececf5;
+    box-shadow: 0 5px 18px #25244a08;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #25244a12;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    margin-bottom: 18px;
+}
+
+.purple { background: #eeeaff; }
+.blue { background: #e6f1ff; }
+.orange { background: #fff0dd; }
+.green { background: #e1f8ec; }
+.pink { background: #ffe8f0; }
+.teal { background: #ddf8f5; }
+.yellow { background: #fff6d9; }
+
+.card h3 {
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #777e96;
+    min-height: 42px;
+}
+
+.card-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: #5c4bce;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.overview {
+    margin-top: 30px;
+    background: white;
+    padding: 23px;
+    border-radius: 15px;
+}
+
+.overview p {
+    color: #737a91;
+    line-height: 1.7;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+footer {
+    text-align: center;
+    color: #9298ab;
+    font-size: 12px;
+    margin-top: 30px;
+}
+
+@media (max-width: 1050px) {
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    main {
+        margin-left: 200px;
+        padding: 22px;
+    }
+}
+
+@media (max-width: 650px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar p {
+        margin-bottom: 15px;
+    }
+
+    .nav-item {
+        display: inline-block;
+        padding: 9px;
+    }
+
+    main {
+        margin-left: 0;
+        padding: 18px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .welcome h2 {
+        font-size: 21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">Student<span>360</span></div>
+    <p>Student Intelligence Platform</p>
+
+    <a href="index.html" class="nav-item active">🏠 Dashboard</a>
+    <a href="academics.html" class="nav-item">🎓 Academics</a>
+    <a href="attendance.html" class="nav-item">📅 Attendance</a>
+    <a href="lms.html" class="nav-item">💻 LMS Activity</a>
+    <a href="engagement.html" class="nav-item">🏆 Engagement</a>
+    <a href="placement.html" class="nav-item">🎯 Placement</a>
+    <a href="skills.html" class="nav-item">🧠 Skills</a>
+    <a href="feedback.html" class="nav-item">💬 Feedback</a>
+</aside>
+
+<main>
+    <div class="topbar">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Unified Student Data Integration System</p>
+        </div>
+        <div class="profile">👤 Student Analytics</div>
+    </div>
+
+    <section class="welcome">
+        <h2>Welcome to Student360 👋</h2>
+        <p>
+            All your student information in one place.
+            Explore academic performance, attendance, LMS activity,
+            engagement, placement readiness, skills and feedback.
+        </p>
+    </section>
+
+    <h2 class="section-title">Student Data Categories</h2>
+
+    <section class="cards">
+
+        <div class="card" onclick="openPage('academics.html')">
+            <div class="card-icon purple">🎓</div>
+            <h3>Academics</h3>
+            <p>CGPA, marks, subject performance and backlogs.</p>
+            <span class="card-link">Explore Academics →</span>
+        </div>
+
+        <div class="card" onclick="openPage('attendance.html')">
+            <div class="card-icon blue">📅</div>
+            <h3>Attendance</h3>
+            <p>Attendance percentage and classes attended.</p>
+            <span class="card-link">View Attendance →</span>
+        </div>
+
+        <div class="card" onclick="openPage('lms.html')">
+            <div class="card-icon orange">💻</div>
+            <h3>LMS Activity</h3>
+            <p>Login frequency and assignment completion.</p>
+            <span class="card-link">View LMS →</span>
+        </div>
+
+        <div class="card" onclick="openPage('engagement.html')">
+            <div class="card-icon green">🏆</div>
+            <h3>Engagement</h3>
+            <p>Events, clubs, hackathons and certifications.</p>
+            <span class="card-link">Explore Engagement →</span>
+        </div>
+
+        <div class="card" onclick="openPage('placement.html')">
+            <div class="card-icon pink">🎯</div>
+            <h3>Placement</h3>
+            <p>Aptitude, coding and mock interview scores.</p>
+            <span class="card-link">View Placement →</span>
+        </div>
+
+        <div class="card" onclick="openPage('skills.html')">
+            <div class="card-icon teal">🧠</div>
+            <h3>Skills</h3>
+            <p>Technical skills and soft-skills assessments.</p>
+            <span class="card-link">Explore Skills →</span>
+        </div>
+
+        <div class="card" onclick="openPage('feedback.html')">
+            <div class="card-icon yellow">💬</div>
+            <h3>Feedback</h3>
+            <p>Student satisfaction and faculty feedback.</p>
+            <span class="card-link">View Feedback →</span>
+        </div>
+
+    </section>
+
+    <section class="overview">
+        <h2>About the Platform</h2>
+        <p>
+            Student360 brings seven categories of student information
+            together to support academic monitoring, student development
+            and placement preparation.
+        </p>
+        <p>
+            Select any category above to open its individual page.
+            The category pages should be saved in the same project folder
+            as this dashboard.
+        </p>
+    </section>
+
+    <footer>
+        Student360 · Student Data Integration Dashboard
+    </footer>
+</main>
+
+<script>
+function openPage(page) {
+    window.location.href = page;
+}
+</script>
+
+</body>
+</html>

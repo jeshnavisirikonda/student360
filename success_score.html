@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student360 - Success Score</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #172554;
+    color: white;
+    padding: 24px;
+}
+
+header h1 { margin: 0 0 8px; }
+header p { margin: 0; color: #cbd5e1; }
+
+.container {
+    max-width: 1000px;
+    margin: 25px auto;
+    padding: 0 18px;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.panel {
+    background: white;
+    padding: 24px;
+    margin-bottom: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0000000d;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 13px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+button:hover { background: #1d4ed8; }
+
+.result {
+    text-align: center;
+    background: #eff6ff;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.score {
+    font-size: 56px;
+    font-weight: bold;
+    color: #2563eb;
+    margin: 10px 0;
+}
+
+.track {
+    height: 14px;
+    background: #dbeafe;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.bar {
+    height: 100%;
+    width: 0%;
+    background: #2563eb;
+    transition: width 0.4s;
+}
+
+.status {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.small {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#recommendations li { margin-bottom: 10px; }
+
+.error {
+    color: #b91c1c;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Student360</h1>
+    <p>AI and Analytics | Student Success Score</p>
+</header>
+
+<div class="container">
+
+<a href="index.html" class="back">← Back to Dashboard</a>
+
+<div class="panel">
+    <h2>Calculate Student Success Score</h2>
+    <p class="small">
+        Enter the student's academic and engagement details.
+        The system calculates a score out of 100 and provides suggestions.
+    </p>
+
+    <form id="scoreForm">
+        <div class="grid">
+
+            <div>
+                <label for="student">Student Name</label>
+                <input id="student" type="text"
+                       placeholder="Enter name" required>
+            </div>
+
+            <div>
+                <label for="roll">Roll Number</label>
+                <input id="roll" type="text"
+                       placeholder="Enter roll number" required>
+            </div>
+
+            <div>
+                <label for="cgpa">CGPA (out of 10)</label>
+                <input id="cgpa" type="number"
+                       min="0" max="10" step="0.1"
+                       placeholder="Example: 7.5" required>
+            </div>
+
+            <div>
+                <label for="attendance">Attendance (%)</label>
+                <input id="attendance" type="number"
+                       min="0" max="100" step="1"
+                       placeholder="Example: 85" required>
+            </div>
+
+            <div>
+                <label for="assignments">Assignments Completed (%)</label>
+                <input id="assignments" type="number"
+                       min="0" max="100" step="1"
+                       placeholder="Example: 90" required>
+            </div>
+
+            <div>
+                <label for="lms">LMS Activity (%)</label>
+                <input id="lms" type="number"
+                       min="0" max="100" step="1"
+                       placeholder="Example: 75" required>
+            </div>
+
+            <div>
+                <label for="engagement">Engagement Score (%)</label>
+                <input id="engagement" type="number"
+                       min="0" max="100" step="1"
+                       placeholder="Events, clubs, activities" required>
+            </div>
+
+        </div>
+
+        <button type="submit">Calculate Success Score</button>
+        <p id="error" class="error"></p>
+    </form>
+</div>
+
+<div class="panel" id="resultPanel" hidden>
+    <div class="result">
+        <h2 id="studentTitle">Student Result</h2>
+        <div class="score" id="score">0/100</div>
+        <div class="track">
+            <div class="bar" id="bar"></div>
+        </div>
+        <p class="status" id="status"></p>
+        <p id="summary"></p>
+    </div>
+
+    <h3>Score Breakdown</h3>
+    <div id="breakdown"></div>
+
+    <h3>Personalized Recommendations</h3>
+    <ul id="recommendations"></ul>
+
+    <p class="small">
+        This is an explainable, rule-based prototype using the entered
+        data. It is not a trained machine-learning model and does not
+        predict a student's future with certainty.
+    </p>
+</div>
+
+</div>
+
+<footer>Student360 | Student Success Analytics</footer>
+
+<script>
+const form = document.getElementById("scoreForm");
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    document.getElementById("error").textContent = "";
+
+    const name = document.getElementById("student").value.trim();
+    const roll = document.getElementById("roll").value.trim();
+    const cgpa = Number(document.getElementById("cgpa").value);
+    const attendance = Number(document.getElementById("attendance").value);
+    const assignments = Number(document.getElementById("assignments").value);
+    const lms = Number(document.getElementById("lms").value);
+    const engagement = Number(document.getElementById("engagement").value);
+
+    const values = [cgpa, attendance, assignments, lms, engagement];
+
+    if (!name || !roll || values.some(function(value) {
+        return !Number.isFinite(value);
+    })) {
+        document.getElementById("error").textContent =
+            "Please complete all fields with valid numbers.";
+        return;
+    }
+
+    if (cgpa < 0 || cgpa > 10 ||
+        attendance < 0 || attendance > 100 ||
+        assignments < 0 || assignments > 100 ||
+        lms < 0 || lms > 100 ||
+        engagement < 0 || engagement > 100) {
+        document.getElementById("error").textContent =
+            "Enter CGPA from 0–10 and all percentages from 0–100.";
+        return;
+    }
+
+    // Explainable weighted scoring model
+    const academicScore = cgpa * 10;
+    const weights = {
+        academic: 0.40,
+        attendance: 0.25,
+        assignments: 0.15,
+        lms: 0.10,
+        engagement: 0.10
+    };
+
+    const score = Math.round(
+        academicScore * weights.academic +
+        attendance * weights.attendance +
+        assignments * weights.assignments +
+        lms * weights.lms +
+        engagement * weights.engagement
+    );
+
+    let status;
+
+    if (score >= 80) {
+        status = "Strong Progress";
+    } else if (score >= 60) {
+        status = "Making Progress";
+    } else {
+        status = "May Need Additional Support";
+    }
+
+    const suggestions = [];
+
+    if (cgpa < 6) {
+        suggestions.push(
+            "Academic support: review difficult subjects and arrange faculty mentoring."
+        );
+    } else if (cgpa < 7.5) {
+        suggestions.push(
+            "Academics: practise regularly and review topics where marks are lower."
+        );
+    }
+
+    if (attendance < 75) {
+        suggestions.push(
+            "Attendance: identify barriers to attending classes and discuss support with a mentor."
+        );
+    }
+
+    if (assignments < 70) {
+        suggestions.push(
+            "Assignments: make a weekly task plan and submit work before deadlines."
+        );
+    }
+
+    if (lms < 50) {
+        suggestions.push(
+            "LMS: check course materials and announcements regularly."
+        );
+    }
+
+    if (engagement < 40) {
+        suggestions.push(
+            "Engagement: explore a study group, club, workshop, or activity that interests you."
+        );
+    }
+
+    if (suggestions.length === 0) {
+        suggestions.push(
+            "Keep up your current learning habits and set a new academic goal."
+        );
+    }
+
+    document.getElementById("resultPanel").hidden = false;
+    document.getElementById("studentTitle").textContent =
+        name + " (" + roll + ")";
+    document.getElementById("score").textContent = score + "/100";
+    document.getElementById("bar").style.width = score + "%";
+    document.getElementById("status").textContent = status;
+    document.getElementById("summary").textContent =
+        "Your score is calculated from five measurable indicators.";
+
+    const breakdown = document.getElementById("breakdown");
+    breakdown.replaceChildren();
+
+    const parts = [
+        ["Academics", academicScore, 40],
+        ["Attendance", attendance, 25],
+        ["Assignments", assignments, 15],
+        ["LMS Activity", lms, 10],
+        ["Engagement", engagement, 10]
+    ];
+
+    parts.forEach(function(part) {
+        const line = document.createElement("p");
+        line.textContent = part[0] + ": " +
+            (part[1] * part[2] / 100).toFixed(1) +
+            " points out of " + part[2];
+        breakdown.appendChild(line);
+    });
+
+    const list = document.getElementById("recommendations");
+    list.replaceChildren();
+
+    suggestions.forEach(function(suggestion) {
+        const item = document.createElement("li");
+        item.textContent = suggestion;
+        list.appendChild(item);
+    });
+
+    document.getElementById("resultPanel").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+</script>
+
+</body>
+</html>
+```

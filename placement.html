@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Placement Readiness</title>
+<style>
+body{font-family:Arial;background:#eaf2ff;padding:25px}
+.card{max-width:450px;margin:auto;background:white;padding:25px;border-radius:15px}
+h2{color:#185abc}
+input,button{width:100%;padding:12px;margin:8px 0;box-sizing:border-box}
+button{background:#185abc;color:white;border:0;border-radius:8px}
+#result{white-space:pre-line;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Placement Readiness</h2>
+<input id="name" placeholder="Student Name">
+<input id="aptitude" type="number" min="0" max="100" placeholder="Aptitude Score (%)">
+<input id="coding" type="number" min="0" max="100" placeholder="Coding Score (%)">
+<input id="interview" type="number" min="0" max="100" placeholder="Mock Interview Score (%)">
+<button onclick="show()">View Placement Data</button>
+<div id="result"></div>
+</div>
+<script>
+function show(){
+let n=document.getElementById("name").value.trim();
+let ids=["aptitude","coding","interview"];
+let v=ids.map(id=>document.getElementById(id).value);
+let r=document.getElementById("result");
+if(!n||v.some(x=>x===""||+x<0||+x>100)){
+r.textContent="Enter valid placement scores.";
+return;
+}
+let avg=(v.reduce((s,x)=>s+(+x),0)/3).toFixed(2);
+r.textContent="Student: "+n+"\nAptitude: "+v[0]+"%\nCoding: "+v[1]+"%\nMock Interview: "+v[2]+"%\nAverage Score: "+avg+"%";
+}
+</script>
+</body>
+</html>

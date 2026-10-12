@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Engagement</title>
+<style>
+body{font-family:Arial;background:#fceeff;padding:25px}
+.card{max-width:450px;margin:auto;background:white;padding:25px;border-radius:15px}
+h2{color:#a12bb3}
+input,button{width:100%;padding:12px;margin:8px 0;box-sizing:border-box}
+button{background:#a12bb3;color:white;border:0;border-radius:8px}
+#result{white-space:pre-line;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Student Engagement</h2>
+<input id="name" placeholder="Student Name">
+<input id="events" type="number" min="0" step="1" placeholder="Events Attended">
+<input id="clubs" type="number" min="0" step="1" placeholder="Clubs Participated">
+<input id="hackathons" type="number" min="0" step="1" placeholder="Hackathons">
+<input id="certs" type="number" min="0" step="1" placeholder="Certifications">
+<button onclick="show()">View Engagement</button>
+<div id="result"></div>
+</div>
+<script>
+function show(){
+let n=document.getElementById("name").value.trim();
+let ids=["events","clubs","hackathons","certs"];
+let vals=ids.map(id=>document.getElementById(id).value);
+let r=document.getElementById("result");
+if(!n||vals.some(v=>v===""||!Number.isInteger(+v)||+v<0)){
+r.textContent="Enter valid engagement details.";
+return;
+}
+r.textContent="Student: "+n+"\nEvents: "+vals[0]+"\nClubs: "+vals[1]+"\nHackathons: "+vals[2]+"\nCertifications: "+vals[3];
+}
+</script>
+</body>
+</html>

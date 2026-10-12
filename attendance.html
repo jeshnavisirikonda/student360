@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student360 - Attendance</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #172554;
+    color: white;
+    padding: 22px 30px;
+}
+
+header h1 {
+    margin: 0 0 6px;
+}
+
+header p {
+    margin: 0;
+    color: #cbd5e1;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 0 18px;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card, .panel {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0000000d;
+}
+
+.card p {
+    color: #64748b;
+    margin: 0 0 10px;
+}
+
+.card h2 {
+    margin: 0;
+    color: #2563eb;
+}
+
+.panel {
+    margin-bottom: 22px;
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.add-btn {
+    background: #2563eb;
+    color: white;
+    margin-top: 18px;
+}
+
+.delete-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.message {
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background: #eff6ff;
+}
+
+.status {
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.good {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.low {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.empty {
+    text-align: center;
+    color: #64748b;
+    padding: 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Student360</h1>
+    <p>Student Attendance Management</p>
+</header>
+
+<div class="container">
+
+    <a class="back" href="index.html">← Back to Dashboard</a>
+
+    <div class="cards">
+        <div class="card">
+            <p>Total Students</p>
+            <h2 id="totalStudents">0</h2>
+        </div>
+
+        <div class="card">
+            <p>Average Attendance</p>
+            <h2 id="averageAttendance">0%</h2>
+        </div>
+
+        <div class="card">
+            <p>Students Below 75%</p>
+            <h2 id="lowAttendance">0</h2>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Add Attendance Record</h2>
+
+        <form id="attendanceForm">
+            <div class="form-grid">
+
+                <div>
+                    <label for="studentName">Student Name</label>
+                    <input id="studentName" type="text"
+                           placeholder="Enter student name" required>
+                </div>
+
+                <div>
+                    <label for="rollNumber">Roll Number</label>
+                    <input id="rollNumber" type="text"
+                           placeholder="Enter roll number" required>
+                </div>
+
+                <div>
+                    <label for="attended">Classes Attended</label>
+                    <input id="attended" type="number"
+                           min="0" step="1" placeholder="Example: 36" required>
+                </div>
+
+                <div>
+                    <label for="conducted">Total Classes Conducted</label>
+                    <input id="conducted" type="number"
+                           min="1" step="1" placeholder="Example: 45" required>
+                </div>
+
+            </div>
+
+            <button class="add-btn" type="submit">Add Attendance</button>
+            <p class="message" id="message" role="status"></p>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Attendance Records</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Roll Number</th>
+                        <th>Attended</th>
+                        <th>Total Classes</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="attendanceTable">
+                    <tr>
+                        <td colspan="7" class="empty">
+                            No attendance records yet. Add your first student above.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<footer>Student360 | Attendance Analytics</footer>
+
+<script>
+const form = document.getElementById("attendanceForm");
+const table = document.getElementById("attendanceTable");
+const message = document.getElementById("message");
+
+let records = [];
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("studentName").value.trim();
+    const roll = document.getElementById("rollNumber").value.trim();
+    const attended = Number(document.getElementById("attended").value);
+    const conducted = Number(document.getElementById("conducted").value);
+
+    if (!name || !roll) {
+        showMessage("Please enter the student name and roll number.", true);
+        return;
+    }
+
+    if (!Number.isInteger(attended) ||
+        !Number.isInteger(conducted) ||
+        conducted <= 0 ||
+        attended < 0 ||
+        attended > conducted) {
+        showMessage(
+            "Enter valid whole numbers. Attended classes cannot exceed total classes.",
+            true
+        );
+        return;
+    }
+
+    const duplicate = records.some(function(record) {
+        return record.roll.toLowerCase() === roll.toLowerCase();
+    });
+
+    if (duplicate) {
+        showMessage("This roll number already exists.", true);
+        return;
+    }
+
+    const percentage = (attended / conducted) * 100;
+
+    records.push({
+        name: name,
+        roll: roll,
+        attended: attended,
+        conducted: conducted,
+        percentage: percentage
+    });
+
+    form.reset();
+    showMessage("Attendance record added successfully!", false);
+    renderRecords();
+});
+
+function showMessage(text, isError) {
+    message.textContent = text;
+    message.style.color = isError ? "#b91c1c" : "#15803d";
+}
+
+function getStatus(percentage) {
+    if (percentage >= 85) {
+        return { text: "Good", className: "good" };
+    }
+
+    if (percentage >= 75) {
+        return { text: "Satisfactory", className: "warning" };
+    }
+
+    return { text: "Low Attendance", className: "low" };
+}
+
+function renderRecords() {
+    table.replaceChildren();
+
+    if (records.length === 0) {
+        const row = table.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 7;
+        cell.className = "empty";
+        cell.textContent = "No attendance records yet.";
+    }
+
+    records.forEach(function(record, index) {
+        const row = table.insertRow();
+        const status = getStatus(record.percentage);
+
+        [
+            record.name,
+            record.roll,
+            record.attended,
+            record.conducted,
+            record.percentage.toFixed(2) + "%"
+        ].forEach(function(value) {
+            const cell = row.insertCell();
+            cell.textContent = value;
+        });
+
+        const statusCell = row.insertCell();
+        const badge = document.createElement("span");
+        badge.className = "status " + status.className;
+        badge.textContent = status.text;
+        statusCell.appendChild(badge);
+
+        const actionCell = row.insertCell();
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "Delete";
+
+        deleteButton.addEventListener("click", function() {
+            records.splice(index, 1);
+            renderRecords();
+            showMessage("Attendance record deleted.", false);
+        });
+
+        actionCell.appendChild(deleteButton);
+    });
+
+    updateDashboard();
+}
+
+function updateDashboard() {
+    document.getElementById("totalStudents").textContent = records.length;
+
+    const average = records.length
+        ? records.reduce(function(sum, record) {
+              return sum + record.percentage;
+          }, 0) / records.length
+        : 0;
+
+    document.getElementById("averageAttendance").textContent =
+        average.toFixed(1) + "%";
+
+    const lowCount = records.filter(function(record) {
+        return record.percentage < 75;
+    }).length;
+
+    document.getElementById("lowAttendance").textContent = lowCount;
+}
+</script>
+
+</body>
+</html>
+```
